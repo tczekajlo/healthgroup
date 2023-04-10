@@ -1,0 +1,31 @@
+server:
+  address: localhost
+  port: 8080
+kubernetes:
+  enabled: false
+consul:
+  enabled: true
+  address: localhost
+  port: 8500
+  scheme: http
+  caFile: ""
+  certFile: ""
+  keyFile: ""
+  insecureSkipVerify: false
+  token: ""
+  timeout: 2s
+concurrency: 5
+httpHealthCheck:
+  - timeoutSec: 50
+    type: http
+    host: 127.0.0.1
+    port: 8500
+  - timeoutSec: 50
+    type: https
+    host: google.com
+    service: test
+  - timeoutSec: 50
+    type: http2
+    host: google.com
+    service: test
+
