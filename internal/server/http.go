@@ -12,6 +12,7 @@ import (
 	"github.com/tczekajlo/healthgroup/internal/config"
 	handler "github.com/tczekajlo/healthgroup/internal/handlers"
 	flogger "github.com/tczekajlo/healthgroup/internal/middleware/logger"
+	"github.com/tczekajlo/healthgroup/internal/version"
 	"go.uber.org/zap"
 )
 
@@ -21,6 +22,7 @@ func NewHTTP(config *config.Config, logger *zap.Logger) error {
 	app := fiber.New(fiber.Config{
 		DisableStartupMessage: true,
 		IdleTimeout:           config.Server.IdleTimeout,
+		AppName:               fmt.Sprintf("healthgroup/%s", version.Version),
 	})
 
 	app.Use(recover.New())

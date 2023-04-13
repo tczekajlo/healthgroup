@@ -1,4 +1,4 @@
 package version
 
-// VERSION is filled out during the build process.
-var VERSION string //nolint:gochecknoglobals
+// Version is filled out during the build process.
+var Version string //nolint:gochecknoglobals

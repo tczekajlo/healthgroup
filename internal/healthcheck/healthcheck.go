@@ -1,6 +1,7 @@
 package healthcheck
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"strings"
@@ -8,6 +9,7 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/tczekajlo/healthgroup/internal/config"
+	"github.com/tczekajlo/healthgroup/internal/version"
 	"go.uber.org/zap"
 	"golang.org/x/net/http2"
 	"golang.org/x/sync/errgroup"
@@ -108,7 +110,13 @@ func (h *HealthCheck) execHTTPHealthCheck(c *fiber.Ctx, check config.HTTPHealthC
 		client.Transport = &http.Transport{}
 	}
 
-	resp, err := client.Get(url) //nolint
+	req, err := http.NewRequestWithContext(context.Background(), http.MethodGet, url, nil)
+	if err != nil {
+		return err
+	}
+	req.Header.Set("User-Agent", fmt.Sprintf("healthgroup/%s", version.Version))
+
+	resp, err := client.Do(req)
 	if err == nil {
 		resp.Body.Close()
 		client.CloseIdleConnections()
