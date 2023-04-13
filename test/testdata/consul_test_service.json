@@ -1,0 +1,48 @@
+{
+    "Datacenter": "dc1",
+    "ID": "40e4a748-2192-161a-0510-9bf59fe950b4",
+    "Node": "t2.320",
+    "Address": "192.168.10.10",
+    "TaggedAddresses": {
+      "lan": "192.168.10.10",
+      "wan": "10.0.10.10"
+    },
+    "NodeMeta": {
+      "somekey": "somevalue"
+    },
+    "Service": {
+      "ID": "redis2",
+      "Service": "redis",
+      "Tags": ["primary", "v1"],
+      "Address": "127.0.0.1",
+      "TaggedAddresses": {
+        "lan": {
+          "address": "127.0.0.1",
+          "port": 8000
+        },
+        "wan": {
+          "address": "198.18.0.1",
+          "port": 80
+        }
+      },
+      "Meta": {
+        "redis_version": "4.0"
+      },
+      "Port": 8000
+    },
+    "Check": {
+      "Node": "t2.320",
+      "CheckID": "service:redis2",
+      "Name": "Redis health check",
+      "Notes": "Script based health check",
+      "Status": "critical",
+      "ServiceID": "redis2",
+      "Definition": {
+        "TCP": "localhost:8888",
+        "Interval": "5s",
+        "Timeout": "1s",
+        "DeregisterCriticalServiceAfter": "30s"
+      }
+    },
+    "SkipNodeUpdate": false
+}
