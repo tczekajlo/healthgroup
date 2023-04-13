@@ -41,7 +41,7 @@ func (h *HealthCheck) runHTTPHealthCheck(c *fiber.Ctx) error {
 
 	for _, check := range h.Config.HTTPHealthCheck {
 		// Skip a given health check if service or namespace doesn't match
-		if h.shouldExecute(c, check) {
+		if h.shouldSkip(c, check) {
 			continue
 		}
 
@@ -54,7 +54,7 @@ func (h *HealthCheck) runHTTPHealthCheck(c *fiber.Ctx) error {
 	return g.Wait()
 }
 
-func (h *HealthCheck) shouldExecute(c *fiber.Ctx, check interface{}) bool {
+func (h *HealthCheck) shouldSkip(c *fiber.Ctx, check interface{}) bool {
 	var checkNS, checkSVC string
 	namespace := c.Params("namespace")
 	service := c.Params("service")

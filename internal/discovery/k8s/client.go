@@ -83,7 +83,7 @@ func (c *Client) IsServiceExists(ctx *fiber.Ctx) (bool, error) {
 	return true, nil
 }
 
-func (c *Client) GetEndpoint(namespace, service string) (*v1.Endpoints, error) {
+func (c *Client) GetEndpoints(namespace, service string) (*v1.Endpoints, error) {
 	return c.clientset.CoreV1().Endpoints(namespace).Get(context.TODO(), service, metav1.GetOptions{})
 }
 
@@ -98,7 +98,7 @@ func (c *Client) IsServiceHealthy(ctx *fiber.Ctx) (bool, error) {
 	}
 
 	if svcExists {
-		endpoint, err := c.GetEndpoint(namespace, service)
+		endpoint, err := c.GetEndpoints(namespace, service)
 		if err != nil {
 			return false, err
 		}
