@@ -28,7 +28,7 @@ func main() {
 
 	flag.Parse()
 
-	viper.SetEnvPrefix("healthgroup")
+	viper.SetEnvPrefix("hg")
 	viper.AutomaticEnv()
 
 	if err := run(f); err != nil {

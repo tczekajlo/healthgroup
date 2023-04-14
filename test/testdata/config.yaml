@@ -2,9 +2,9 @@ server:
   address: localhost
   port: 8080
 kubernetes:
-  enabled: false
+  enabled: true
 consul:
-  enabled: false
+  enabled: true
   address: localhost
   port: 8500
   scheme: http

@@ -54,6 +54,10 @@ out/lint.xml: $(GOLANGCI_LINT) out download
 test: ## Runs all tests
 	@go test -v $(ARGS) ./...
 
+.PHONY: integration-test
+integration-test: ## Runs all tests
+	@go test -v -tags integration $(ARGS) ./...
+
 coverage: out/report.json ## Displays coverage per func on cli
 	go tool cover -func=out/cover.out
 

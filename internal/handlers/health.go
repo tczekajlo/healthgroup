@@ -16,9 +16,9 @@ func Health(c *fiber.Ctx, healthCheck *healthcheck.HealthCheck, discovery discov
 	}
 
 	if !exist {
-		return c.Status(fiber.StatusServiceUnavailable).JSON(ResponseHTTP{
+		return c.Status(fiber.StatusNotFound).JSON(ResponseHTTP{
 			Success: false,
-			Message: "Service doesn't exist",
+			Message: "Service not found",
 		})
 	}
 
