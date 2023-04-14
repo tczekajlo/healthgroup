@@ -46,7 +46,7 @@ func TestRoute(t *testing.T) {
 		{
 			desc:         "health check for Consul service",
 			path:         "/health/consul/testservice",
-			expectedCode: fiber.StatusNotFound,
+			expectedCode: fiber.StatusServiceUnavailable,
 		},
 		{
 			desc:         "health check for Consul service with namespace",

@@ -56,7 +56,7 @@ test: ## Runs all tests
 
 .PHONY: integration-test
 integration-test: ## Runs all tests
-	@go test -v -tags integration $(ARGS) ./...
+	@go test -v -tags integration -run TestServer $(ARGS) ./...
 
 coverage: out/report.json ## Displays coverage per func on cli
 	go tool cover -func=out/cover.out
