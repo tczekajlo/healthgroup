@@ -2,6 +2,7 @@ package healthcheck
 
 import (
 	"context"
+	"crypto/tls"
 	"fmt"
 	"net/http"
 	"strings"
@@ -103,11 +104,19 @@ func (h *HealthCheck) execHTTPHealthCheck(c *fiber.Ctx, check config.HTTPHealthC
 		Timeout: time.Duration(check.TimeoutSec) * time.Second,
 	}
 
+	tlsConfig := &tls.Config{
+		InsecureSkipVerify: check.InsecureSkipVerify, //nolint:gosec
+	}
+
 	switch check.Type {
 	case HTTP2:
-		client.Transport = &http2.Transport{}
+		client.Transport = &http2.Transport{
+			TLSClientConfig: tlsConfig,
+		}
 	default:
-		client.Transport = &http.Transport{}
+		client.Transport = &http.Transport{
+			TLSClientConfig: tlsConfig,
+		}
 	}
 
 	req, err := http.NewRequestWithContext(context.Background(), http.MethodGet, url, nil)

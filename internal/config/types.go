@@ -32,13 +32,14 @@ type Server struct {
 }
 
 type HTTPHealthCheck struct {
-	TimeoutSec  int
-	Type        string
-	RequestPath string
-	Port        int
-	Host        string
-	Service     string
-	Namespace   string
+	TimeoutSec         int
+	Type               string
+	RequestPath        string
+	Port               int
+	Host               string
+	Service            string
+	Namespace          string
+	InsecureSkipVerify bool
 }
 
 type Kubernetes struct {
