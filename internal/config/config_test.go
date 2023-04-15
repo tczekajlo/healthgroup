@@ -100,7 +100,7 @@ func TestReadConfig(t *testing.T) {
 	assert.Equal(t, HTTPHealthCheck{
 		Type:    "https",
 		Host:    "google.com",
-		Timeout: 50 * time.Second,
+		Timeout: 5 * time.Second,
 		Service: "test",
 	}, config.HTTPHealthCheck[0])
 	assert.Equal(t, true, config.Consul.Enabled)
