@@ -9,6 +9,7 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/requestid"
 	"github.com/stretchr/testify/assert"
 	"github.com/tczekajlo/healthgroup/internal/config"
+	"github.com/tczekajlo/healthgroup/internal/discovery"
 	"github.com/tczekajlo/healthgroup/internal/log"
 )
 
@@ -86,7 +87,7 @@ func TestBuildURL(t *testing.T) {
 	}
 }
 
-func TestShouldExecute(t *testing.T) {
+func TestShouldSkip(t *testing.T) {
 	t.Parallel()
 
 	logger, _ := log.NewAtLevel("ERROR")
@@ -103,8 +104,9 @@ func TestShouldExecute(t *testing.T) {
 	assert.Empty(t, errReadConfig)
 
 	check := HealthCheck{
-		Logger: logger,
-		Config: c,
+		Logger:    logger,
+		Config:    c,
+		Discovery: discovery.Kubernetes,
 	}
 
 	table := []struct {
@@ -166,6 +168,28 @@ func TestShouldExecute(t *testing.T) {
 				Namespace: "test",
 			},
 			expected: true,
+			path:     "/health/kubernetes/ns/testservice2",
+			route:    "/health/kubernetes/:namespace/:service",
+		},
+		{
+			desc: "kubernetes - skip discovery",
+			healthCheck: config.HTTPHealthCheck{
+				Type:      "http",
+				Host:      "example.com",
+				Discovery: discovery.Consul,
+			},
+			expected: true,
+			path:     "/health/kubernetes/ns/testservice2",
+			route:    "/health/kubernetes/:namespace/:service",
+		},
+		{
+			desc: "kubernetes - don't skip discovery",
+			healthCheck: config.HTTPHealthCheck{
+				Type:      "http",
+				Host:      "example.com",
+				Discovery: discovery.Kubernetes,
+			},
+			expected: false,
 			path:     "/health/kubernetes/ns/testservice2",
 			route:    "/health/kubernetes/:namespace/:service",
 		},

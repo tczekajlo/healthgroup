@@ -23,8 +23,9 @@ const (
 )
 
 type HealthCheck struct {
-	Logger *zap.Logger
-	Config *config.Config
+	Logger    *zap.Logger
+	Config    *config.Config
+	Discovery string
 }
 
 func (h *HealthCheck) Run(c *fiber.Ctx) error {
@@ -58,7 +59,7 @@ func (h *HealthCheck) runHTTPHealthCheck(c *fiber.Ctx) error {
 }
 
 func (h *HealthCheck) shouldSkip(c *fiber.Ctx, check interface{}) bool {
-	var checkNS, checkSVC string
+	var checkNS, checkSVC, checkDiscovery string
 	namespace := c.Params("namespace")
 	service := c.Params("service")
 	requestID := c.GetRespHeader("X-Request-Id")
@@ -67,6 +68,15 @@ func (h *HealthCheck) shouldSkip(c *fiber.Ctx, check interface{}) bool {
 	case config.HTTPHealthCheck:
 		checkNS = v.Namespace
 		checkSVC = v.Service
+		checkDiscovery = strings.ToLower(v.Discovery)
+	}
+
+	if h.Discovery != checkDiscovery && checkDiscovery != "" {
+		h.Logger.Debug("skip health check",
+			zap.String("request_id", requestID),
+			zap.Any("health_check", check),
+		)
+		return true
 	}
 
 	if checkNS != namespace && checkNS != "" {
@@ -101,7 +111,7 @@ func (h *HealthCheck) execHTTPHealthCheck(c *fiber.Ctx, check config.HTTPHealthC
 	}
 
 	client := http.Client{
-		Timeout: time.Duration(check.TimeoutSec) * time.Second,
+		Timeout: check.Timeout * time.Second,
 	}
 
 	tlsConfig := &tls.Config{

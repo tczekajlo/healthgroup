@@ -1,12 +1,12 @@
 server:
-  address: localhost
+  address: 0.0.0.0
   port: 8080
+  idleTimeout: 5s
 kubernetes:
-  enabled: false
-consul:
   enabled: true
-  address: localhost
-  port: 8500
+consul:
+  enabled: false
+  address: 127.0.0.1:8500
   scheme: http
   caFile: ""
   certFile: ""
@@ -16,16 +16,13 @@ consul:
   timeout: 2s
 concurrency: 5
 httpHealthCheck:
-  - timeoutSec: 50
+  - timeout: 2s
     type: http
     host: 127.0.0.1
     port: 8500
-  - timeoutSec: 50
-    type: https
+    service: "test"
+    namespace: "test_namespace"
+    insecureSkipVerify: false
+    requestPath: /test
+  - type: https
     host: google.com
-    service: test
-  - timeoutSec: 50
-    type: http2
-    host: google.com
-    service: test
-

@@ -17,8 +17,6 @@ import (
 )
 
 func NewHTTP(config *config.Config, logger *zap.Logger) error {
-	logger.Info("healthgroup", zap.String("version", version.Version))
-
 	addr := fmt.Sprintf("%s:%d", config.Server.Address, config.Server.Port)
 
 	app := fiber.New(fiber.Config{

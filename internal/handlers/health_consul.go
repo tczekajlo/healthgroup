@@ -20,8 +20,9 @@ import (
 // @Router /health/consul/{namespace}/{service} [get]
 func HealthConsul(config *config.Config, logger *zap.Logger) fiber.Handler {
 	h := &healthcheck.HealthCheck{
-		Logger: logger,
-		Config: config,
+		Logger:    logger,
+		Config:    config,
+		Discovery: discovery.Consul,
 	}
 
 	d, err := discovery.New(&discovery.Discovery{

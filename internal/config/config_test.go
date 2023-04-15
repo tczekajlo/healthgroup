@@ -22,8 +22,7 @@ func TestSetFromEnv(t *testing.T) {
 	os.Setenv("HG_SERVER_PORT", "123")
 	os.Setenv("HG_KUBERNETES_ENABLED", "true")
 	os.Setenv("HG_CONSUL_ENABLED", "true")
-	os.Setenv("HG_CONSUL_ADDRESS", "consul.host")
-	os.Setenv("HG_CONSUL_PORT", "8501")
+	os.Setenv("HG_CONSUL_ADDRESS", "consul.host:8500")
 	os.Setenv("HG_CONSUL_SCHEME", "https")
 	os.Setenv("HG_CONSUL_INSECURE_SKIP_VERIFY", "true")
 	os.Setenv("HG_CONSUL_TOKEN", "testtoken")
@@ -39,8 +38,7 @@ func TestSetFromEnv(t *testing.T) {
 	assert.Equal(t, 123, config.Server.Port, "HG_SERVER_PORT - should be equal")
 	assert.Equal(t, true, config.Kubernetes.Enabled, "HG_KUBERNETES_ENABLED - should be equal")
 	assert.Equal(t, true, config.Consul.Enabled, "HG_CONSUL_ENABLED - should be equal")
-	assert.Equal(t, "consul.host", config.Consul.Address, "HG_CONSUL_ADDRESS - should be equal")
-	assert.Equal(t, 8501, config.Consul.Port, "HG_CONSUL_PORT - should be equal")
+	assert.Equal(t, "consul.host:8500", config.Consul.Address, "HG_CONSUL_ADDRESS - should be equal")
 	assert.Equal(t, "https", config.Consul.Scheme, "HG_CONSUL_SCHEME - should be equal")
 	assert.Equal(t, true, config.Consul.InsecureSkipVerify, "HG_CONSUL_INSECURE_SKIP_VERIFY - should be equal")
 	assert.Equal(t, "testtoken", config.Consul.Token, "HG_CONSUL_TOKEN - should be equal")
@@ -65,9 +63,8 @@ func TestSetDefault(t *testing.T) {
 	assert.Equal(t, 5, config.Concurrency)
 	assert.Equal(t, true, config.Kubernetes.Enabled)
 	assert.Equal(t, false, config.Consul.Enabled)
-	assert.Equal(t, "127.0.0.1", config.Consul.Address)
+	assert.Equal(t, "127.0.0.1:8500", config.Consul.Address)
 	assert.Equal(t, "http", config.Consul.Scheme)
-	assert.Equal(t, 8500, config.Consul.Port)
 	assert.Empty(t, config.Consul.Token)
 	assert.Equal(t, time.Second*2, config.Consul.Timeout)
 	assert.Equal(t, false, config.Consul.InsecureSkipVerify)
@@ -101,10 +98,10 @@ func TestReadConfig(t *testing.T) {
 	assert.Equal(t, 8080, config.Server.Port)
 	assert.Equal(t, 5, config.Concurrency)
 	assert.Equal(t, HTTPHealthCheck{
-		Type:       "https",
-		Host:       "google.com",
-		TimeoutSec: 50,
-		Service:    "test",
+		Type:    "https",
+		Host:    "google.com",
+		Timeout: 50 * time.Second,
+		Service: "test",
 	}, config.HTTPHealthCheck[0])
 	assert.Equal(t, true, config.Consul.Enabled)
 

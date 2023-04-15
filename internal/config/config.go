@@ -70,8 +70,7 @@ func (c *Config) SetDefault() error {
 	c.Concurrency = 5
 	c.Kubernetes.Enabled = true
 	c.Consul.Enabled = false
-	c.Consul.Address = "127.0.0.1"
-	c.Consul.Port = 8500
+	c.Consul.Address = "127.0.0.1:8500"
 	c.Consul.Scheme = "http"
 	c.Consul.InsecureSkipVerify = false
 	c.Consul.Timeout = time.Second * 2 //nolint:gomnd
@@ -130,10 +129,6 @@ func (c *Config) SetFromEnv() error { //nolint:cyclop
 
 	if v := viper.GetDuration("consul_timeout"); v != 0 {
 		c.Consul.Timeout = v
-	}
-
-	if v := viper.GetInt("consul_port"); v != 0 {
-		c.Consul.Port = v
 	}
 
 	_, ok = os.LookupEnv("HG_CONSUL_INSECURE_SKIP_VERIFY")

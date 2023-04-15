@@ -1,8 +1,6 @@
 package consul
 
 import (
-	"fmt"
-
 	"github.com/gofiber/fiber/v2"
 	capi "github.com/hashicorp/consul/api"
 	"github.com/tczekajlo/healthgroup/internal/config"
@@ -25,17 +23,15 @@ func New(c *Client) (*Client, error) {
 
 	c.consulConfig = capi.DefaultConfig()
 
-	address := fmt.Sprintf("%s:%d", c.Config.Consul.Address, c.Config.Consul.Port)
-
 	switch c.Config.Consul.Scheme {
 	case "https":
-		c.consulConfig.TLSConfig.Address = address
+		c.consulConfig.TLSConfig.Address = c.Config.Consul.Address
 		c.consulConfig.TLSConfig.CAFile = c.Config.Consul.CAFile
 		c.consulConfig.TLSConfig.CertFile = c.Config.Consul.CertFile
 		c.consulConfig.TLSConfig.KeyFile = c.Config.Consul.KeyFile
 		c.consulConfig.TLSConfig.InsecureSkipVerify = c.Config.Consul.InsecureSkipVerify
 	default:
-		c.consulConfig.Address = address
+		c.consulConfig.Address = c.Config.Consul.Address
 	}
 
 	httpClient, err := capi.NewHttpClient(c.consulConfig.Transport, c.consulConfig.TLSConfig)

@@ -5,18 +5,12 @@ kubernetes:
   enabled: true
 consul:
   enabled: true
-  address: localhost
-  port: 8500
+  address: 127.0.0.1:8500
   scheme: http
-  caFile: ""
-  certFile: ""
-  keyFile: ""
-  insecureSkipVerify: false
-  token: ""
   timeout: 2s
 concurrency: 5
 httpHealthCheck:
-  - timeoutSec: 50
+  - timeout: 5s
     type: https
     host: google.com
     service: test
