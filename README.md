@@ -223,3 +223,18 @@ X-Request-Id: 84ab63e5-5cbb-49eb-9840-e855e3fab1d6
   "message": "Service is not healthy"
 }
 ```
+
+## Test & lint
+Run linting
+
+```bash
+make lint
+```
+
+Run tests
+
+```bash
+make test
+```
+
+Whenever you need help regarding the available actions, use the `make help` command.
