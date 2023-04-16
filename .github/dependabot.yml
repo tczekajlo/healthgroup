@@ -6,3 +6,5 @@ updates:
       interval: "weekly"
     assignees:
       - "tczekajlo"
+    commit-message:
+      prefix: "fix(deps): "
