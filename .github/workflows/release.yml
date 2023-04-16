@@ -26,10 +26,10 @@ jobs:
 
       - name: Generate changelog
         run: |
-          docker run --rm -e VERSION=${{ env.VERSION }} -v `pwd`:/workdir quay.io/git-chglog/git-chglog:latest \
-            --output release_changelog.md --template .chglog/RELEASE_CHANGELOG.tpl.md ${VERSION}
+          docker run --rm -e VERSION=${{ env.VERSION }} -v /home/runner:/home/runner -v `pwd`:/workdir quay.io/git-chglog/git-chglog:latest \
+            --output /home/runner/release_changelog.md --template .chglog/RELEASE_CHANGELOG.tpl.md ${VERSION}
 
-          cat release_changelog.md
+          cat /home/runner/release_changelog.md
 
       - name: Set up Go
         uses: actions/setup-go@v4
@@ -47,6 +47,6 @@ jobs:
         with:
           distribution: goreleaser
           version: latest
-          args: release --release-notes=release_changelog.md --clean
+          args: release --release-notes=/home/runner/release_changelog.md --clean
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
