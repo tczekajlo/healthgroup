@@ -12,10 +12,12 @@ options:
         - perf
         - refactor
         - breaking
+        - chore
   commit_groups:
      title_maps:
        feat: Features
        fix: Bug Fixes
+       chore: Chore
        perf: Performance Improvements
        refactor: Code Refactoring
        breaking: Breaking changes
