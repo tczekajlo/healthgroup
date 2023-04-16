@@ -25,7 +25,7 @@ archives:
 
 dockers:
   - id: healthgroup
-    use: docker
+    use: buildx
     image_templates:
     - "ghcr.io/tczekajlo/healthgroup:latest"
     - "ghcr.io/tczekajlo/healthgroup:{{ .Tag }}"
@@ -36,6 +36,7 @@ dockers:
     - "--label=org.opencontainers.image.title={{.ProjectName}}"
     - "--label=org.opencontainers.image.revision={{.FullCommit}}"
     - "--label=org.opencontainers.image.version={{.Version}}"
+    - "--build-arg=VERSION={{.Version}}"
 
 before:
   hooks:

@@ -13,13 +13,14 @@ RUN --mount=type=cache,target=/go/pkg/mod \
 
 # build th application
 FROM base AS build
+ARG VERSION
 # temp mount all files instead of loading into image with COPY
 # temp mount module cache
 # temp mount go build cache
 RUN --mount=target=. \
     --mount=type=cache,target=/go/pkg/mod \
     --mount=type=cache,target=/root/.cache/go-build \
-    go build -ldflags="-w -s" -o /app/main ./cmd/healthgroup/*.go
+    go build -ldflags="-s -w -X \"github.com/tczekajlo/healthgroup/internal/version.Version=$VERSION\"" -o /app/main ./cmd/healthgroup/*.go
 
 # Import the binary from build stage
 FROM gcr.io/distroless/static:nonroot as prd
