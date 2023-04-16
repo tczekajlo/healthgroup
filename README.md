@@ -6,7 +6,7 @@
 
 If one of the checks in a group fails, healthgroup returns the `503` status code.
 
-Use cases where `healthgroup` can be helpful are up to your imagination :) The typical use case would be a situation where you want to make an HTTP(S) Load Balancer aware of a service that is not placed directly in the backend, and between the LB and the service is placed another hop, e.g. proxy.
+Use cases where `healthgroup` can be helpful are up to your imagination :) The typical use case is a situation where you want to make an HTTP(S) Load Balancer aware of a service's health that is not placed directly in the backend, and between the LB and the service is a hop, e.g. proxy.
 
 ## Usage
 
@@ -225,6 +225,7 @@ X-Request-Id: 84ab63e5-5cbb-49eb-9840-e855e3fab1d6
 ```
 
 ## Test & lint
+
 Run linting
 
 ```bash

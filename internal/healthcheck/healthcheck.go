@@ -44,7 +44,7 @@ func (h *HealthCheck) runHTTPHealthCheck(c *fiber.Ctx) error {
 	g.SetLimit(h.Config.Concurrency)
 
 	for _, check := range h.Config.HTTPHealthCheck {
-		// Skip a given health check if service or namespace doesn't match
+		// Skip a given health check if service or namespace doesn't match.
 		if h.shouldSkip(c, check) {
 			continue
 		}

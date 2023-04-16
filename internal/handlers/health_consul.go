@@ -8,7 +8,7 @@ import (
 	"go.uber.org/zap"
 )
 
-// HealthConsul is a function to run health check for a Consul service along with extra checks defined in the configuration file.
+// HealthConsul is a function to run a health check for a Consul service along with extra checks defined in the configuration file.
 // @Summary Run health checks
 // @Description Run health checks
 // @Produce json
