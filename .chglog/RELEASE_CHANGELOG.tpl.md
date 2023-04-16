@@ -3,7 +3,7 @@
 ### {{ .Title }}
 
 {{ range .Commits -}}
-* {{ .Subject }}
+* {{ .Subject }} (`{{ .Hash.Short }}`)
 {{ end }}
 {{ end -}}
 
