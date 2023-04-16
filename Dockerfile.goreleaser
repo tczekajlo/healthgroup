@@ -1,0 +1,6 @@
+# syntax = docker/dockerfile:1.5
+FROM gcr.io/distroless/static:nonroot as prd
+COPY healthgroup /healthgroup
+# this is the numeric version of user nonroot:nonroot to check runAsNonRoot in kubernetes
+USER 65532:65532
+ENTRYPOINT ["/healthgroup"]
