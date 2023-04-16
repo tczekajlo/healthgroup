@@ -25,8 +25,11 @@ archives:
 
 dockers:
   - id: healthgroup
+    use: docker
     image_templates:
-    - "tczekajlo/healthgroup:latest"
+    - "ghcr.io/tczekajlo/healthgroup:latest"
+    - "ghcr.io/tczekajlo/healthgroup:{{ .Tag }}"
+    - "ghcr.io/tczekajlo/healthgroup:v{{ .Major }}"
 
     build_flag_templates:
     - "--label=org.opencontainers.image.created={{.Date}}"
@@ -41,4 +44,7 @@ before:
 release:
   prerelease: auto
   footer: |
-    Test
+    ## Docker images
+
+    `ghcr.io/tczekajlo/healthgroup:{{ .Tag }}`
+    `ghcr.io/tczekajlo/healthgroup:v{{ .Major }}`

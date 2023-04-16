@@ -8,6 +8,29 @@ If one of the checks in a group fails, healthgroup returns the `503` status code
 
 Use cases where `healthgroup` can be helpful are up to your imagination :) The typical use case is a situation where you want to make an HTTP(S) Load Balancer aware of a service's health that is not placed directly in the backend, and between the LB and the service is a hop, e.g. proxy.
 
+## Table of Contents
+
+- [healthgroup](#healthgroup)
+  - [Table of Contents](#table-of-contents)
+  - [Usage](#usage)
+  - [Example of usage](#example-of-usage)
+  - [Configuration](#configuration)
+    - [Environment variables](#environment-variables)
+    - [Configuration file](#configuration-file)
+      - [HTTP(s) health check specification](#https-health-check-specification)
+  - [Health check grouping](#health-check-grouping)
+  - [Endpoints](#endpoints)
+    - [Kubernetes](#kubernetes)
+      - [Path Parameters](#path-parameters)
+      - [Sample Request](#sample-request)
+      - [Sample Response](#sample-response)
+    - [Consul](#consul)
+      - [Path Parameters](#path-parameters-1)
+      - [Query Parameters](#query-parameters)
+      - [Sample Request](#sample-request-1)
+      - [Sample Response](#sample-response-1)
+  - [Test \& lint](#test--lint)
+
 ## Usage
 
 ```text
