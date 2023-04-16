@@ -37,6 +37,8 @@ dockers:
     - "--label=org.opencontainers.image.title={{.ProjectName}}"
     - "--label=org.opencontainers.image.revision={{.FullCommit}}"
     - "--label=org.opencontainers.image.version={{.Version}}"
+    - "--label=org.opencontainers.image.description=healthgroup"
+    - "--label=org.opencontainers.image.source=https://github.com/tczekajlo/healthgroup"
     - "--build-arg=VERSION={{.Version}}"
 
 before:
