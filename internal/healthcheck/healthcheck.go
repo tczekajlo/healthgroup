@@ -2,6 +2,7 @@ package healthcheck
 
 import (
 	"context"
+	"crypto/tls"
 	"fmt"
 	"net/http"
 	"strings"
@@ -22,8 +23,9 @@ const (
 )
 
 type HealthCheck struct {
-	Logger *zap.Logger
-	Config *config.Config
+	Logger    *zap.Logger
+	Config    *config.Config
+	Discovery string
 }
 
 func (h *HealthCheck) Run(c *fiber.Ctx) error {
@@ -42,7 +44,7 @@ func (h *HealthCheck) runHTTPHealthCheck(c *fiber.Ctx) error {
 	g.SetLimit(h.Config.Concurrency)
 
 	for _, check := range h.Config.HTTPHealthCheck {
-		// Skip a given health check if service or namespace doesn't match
+		// Skip a given health check if service or namespace doesn't match.
 		if h.shouldSkip(c, check) {
 			continue
 		}
@@ -57,7 +59,7 @@ func (h *HealthCheck) runHTTPHealthCheck(c *fiber.Ctx) error {
 }
 
 func (h *HealthCheck) shouldSkip(c *fiber.Ctx, check interface{}) bool {
-	var checkNS, checkSVC string
+	var checkNS, checkSVC, checkDiscovery string
 	namespace := c.Params("namespace")
 	service := c.Params("service")
 	requestID := c.GetRespHeader("X-Request-Id")
@@ -66,6 +68,15 @@ func (h *HealthCheck) shouldSkip(c *fiber.Ctx, check interface{}) bool {
 	case config.HTTPHealthCheck:
 		checkNS = v.Namespace
 		checkSVC = v.Service
+		checkDiscovery = strings.ToLower(v.Discovery)
+	}
+
+	if h.Discovery != checkDiscovery && checkDiscovery != "" {
+		h.Logger.Debug("skip health check",
+			zap.String("request_id", requestID),
+			zap.Any("health_check", check),
+		)
+		return true
 	}
 
 	if checkNS != namespace && checkNS != "" {
@@ -100,14 +111,22 @@ func (h *HealthCheck) execHTTPHealthCheck(c *fiber.Ctx, check config.HTTPHealthC
 	}
 
 	client := http.Client{
-		Timeout: time.Duration(check.TimeoutSec) * time.Second,
+		Timeout: check.Timeout * time.Second,
+	}
+
+	tlsConfig := &tls.Config{
+		InsecureSkipVerify: check.InsecureSkipVerify, //nolint:gosec
 	}
 
 	switch check.Type {
 	case HTTP2:
-		client.Transport = &http2.Transport{}
+		client.Transport = &http2.Transport{
+			TLSClientConfig: tlsConfig,
+		}
 	default:
-		client.Transport = &http.Transport{}
+		client.Transport = &http.Transport{
+			TLSClientConfig: tlsConfig,
+		}
 	}
 
 	req, err := http.NewRequestWithContext(context.Background(), http.MethodGet, url, nil)

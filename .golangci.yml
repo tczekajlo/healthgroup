@@ -37,11 +37,19 @@ linters:
     - unconvert # Remove unnecessary type conversions
     - unparam # Reports unused function parameters
     - whitespace # Tool for detection of leading and trailing whitespace
+    - forbidigo # Go linter for forbidding identifiers
 
 linters-settings:
   funlen:
     lines: 100
     statements: 50
+
+  forbidigo:
+    forbid:
+      - '^errors\.Wrap$'
+      - '^errors\.Wrapf$'
+      - '^fmt\.Errorf$'
+      - '^errors\.Errorf$'
 
 issues:
   # Excluding configuration per-path, per-linter, per-text and per-source

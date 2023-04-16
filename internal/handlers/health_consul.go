@@ -8,7 +8,7 @@ import (
 	"go.uber.org/zap"
 )
 
-// HealthConsul is a function to run health check for a Consul service along with extra checks defined in the configuration file.
+// HealthConsul is a function to run a health check for a Consul service along with extra checks defined in the configuration file.
 // @Summary Run health checks
 // @Description Run health checks
 // @Produce json
@@ -20,8 +20,9 @@ import (
 // @Router /health/consul/{namespace}/{service} [get]
 func HealthConsul(config *config.Config, logger *zap.Logger) fiber.Handler {
 	h := &healthcheck.HealthCheck{
-		Logger: logger,
-		Config: config,
+		Logger:    logger,
+		Config:    config,
+		Discovery: discovery.Consul,
 	}
 
 	d, err := discovery.New(&discovery.Discovery{

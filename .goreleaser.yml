@@ -1,0 +1,44 @@
+builds:
+  - id: linux
+    binary: healthgroup
+    main: ./cmd/healthgroup/main.go
+    goos:
+      - linux
+    goarch:
+      - amd64
+    flags:
+      - -mod=readonly
+    ldflags:
+      - -s -w -X "github.com/tczekajlo/healthgroup/internal/version.Version={{ .Version }}"
+    env:
+      - CGO_ENABLED=0
+
+archives:
+  - id: healthgroup
+    rlcp: true
+    builds:
+      - linux
+    name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+    wrap_in_directory: "true"
+    files:
+      - README.md
+
+dockers:
+  - id: healthgroup
+    image_templates:
+    - "tczekajlo/healthgroup:latest"
+
+    build_flag_templates:
+    - "--label=org.opencontainers.image.created={{.Date}}"
+    - "--label=org.opencontainers.image.title={{.ProjectName}}"
+    - "--label=org.opencontainers.image.revision={{.FullCommit}}"
+    - "--label=org.opencontainers.image.version={{.Version}}"
+
+before:
+  hooks:
+    - go mod tidy
+
+release:
+  prerelease: auto
+  footer: |
+    Test

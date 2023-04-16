@@ -62,14 +62,15 @@ func (c *Config) ReadConfig() error {
 }
 
 func (c *Config) SetDefault() error {
+	c.logger.Debug("setting default values")
+
 	c.Server.Address = "0.0.0.0"
 	c.Server.Port = 8080
 	c.Server.IdleTimeout = time.Second * 5 //nolint:gomnd
 	c.Concurrency = 5
 	c.Kubernetes.Enabled = true
 	c.Consul.Enabled = false
-	c.Consul.Address = "127.0.0.1"
-	c.Consul.Port = 8500
+	c.Consul.Address = "127.0.0.1:8500"
 	c.Consul.Scheme = "http"
 	c.Consul.InsecureSkipVerify = false
 	c.Consul.Timeout = time.Second * 2 //nolint:gomnd
@@ -78,6 +79,8 @@ func (c *Config) SetDefault() error {
 }
 
 func (c *Config) SetFromEnv() error { //nolint:cyclop
+	c.logger.Debug("reading environment variables and setting values")
+
 	if v := viper.GetString("server_address"); v != "" {
 		c.Server.Address = v
 	}
@@ -90,11 +93,13 @@ func (c *Config) SetFromEnv() error { //nolint:cyclop
 		c.Concurrency = v
 	}
 
-	if v := viper.GetBool("kubernetes_enabled"); v != c.Kubernetes.Enabled {
+	_, ok := os.LookupEnv("HG_KUBERNETES_ENABLED")
+	if v := viper.GetBool("kubernetes_enabled"); ok {
 		c.Kubernetes.Enabled = v
 	}
 
-	if v := viper.GetBool("consul_enabled"); v != c.Consul.Enabled {
+	_, ok = os.LookupEnv("HG_CONSUL_ENABLED")
+	if v := viper.GetBool("consul_enabled"); ok {
 		c.Consul.Enabled = v
 	}
 
@@ -126,11 +131,8 @@ func (c *Config) SetFromEnv() error { //nolint:cyclop
 		c.Consul.Timeout = v
 	}
 
-	if v := viper.GetInt("consul_port"); v != 0 {
-		c.Consul.Port = v
-	}
-
-	if v := viper.GetBool("consul_insecure_skip_verify"); v != c.Consul.InsecureSkipVerify {
+	_, ok = os.LookupEnv("HG_CONSUL_INSECURE_SKIP_VERIFY")
+	if v := viper.GetBool("consul_insecure_skip_verify"); ok {
 		c.Consul.InsecureSkipVerify = v
 	}
 

@@ -19,8 +19,9 @@ import (
 // @Router /health/kubernetes/{namespace}/{service} [get]
 func HealthKubernetes(config *config.Config, logger *zap.Logger) fiber.Handler {
 	h := &healthcheck.HealthCheck{
-		Logger: logger,
-		Config: config,
+		Logger:    logger,
+		Config:    config,
+		Discovery: discovery.Kubernetes,
 	}
 
 	d, err := discovery.New(&discovery.Discovery{

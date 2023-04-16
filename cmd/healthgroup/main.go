@@ -10,7 +10,9 @@ import (
 	"github.com/tczekajlo/healthgroup/internal/config"
 	"github.com/tczekajlo/healthgroup/internal/log"
 	"github.com/tczekajlo/healthgroup/internal/server"
+	"github.com/tczekajlo/healthgroup/internal/version"
 	"go.uber.org/automaxprocs/maxprocs"
+	"go.uber.org/zap"
 	"k8s.io/client-go/util/homedir"
 )
 
@@ -28,7 +30,7 @@ func main() {
 
 	flag.Parse()
 
-	viper.SetEnvPrefix("healthgroup")
+	viper.SetEnvPrefix("hg")
 	viper.AutomaticEnv()
 
 	if err := run(f); err != nil {
@@ -42,6 +44,7 @@ func run(flags *config.Flags) error {
 	if err != nil {
 		return err
 	}
+	logger.Info("healthgroup", zap.String("version", version.Version))
 
 	defer func() {
 		err = logger.Sync()

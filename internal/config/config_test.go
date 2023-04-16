@@ -11,42 +11,41 @@ import (
 )
 
 func TestSetFromEnv(t *testing.T) {
-	viper.SetEnvPrefix("healthgroup")
+	viper.SetEnvPrefix("hg")
 	viper.AutomaticEnv()
 
-	config := New()
+	logger, _ := log.NewAtLevel("ERROR")
+	config := New(WithLogger(logger))
 
-	os.Setenv("HEALTHGROUP_SERVER_ADDRESS", "testhost")
-	os.Setenv("HEALTHGROUP_CONCURRENCY", "1")
-	os.Setenv("HEALTHGROUP_SERVER_PORT", "123")
-	os.Setenv("HEALTHGROUP_KUBERNETES_ENABLED", "true")
-	os.Setenv("HEALTHGROUP_CONSUL_ENABLED", "true")
-	os.Setenv("HEALTHGROUP_CONSUL_ADDRESS", "consul.host")
-	os.Setenv("HEALTHGROUP_CONSUL_PORT", "8501")
-	os.Setenv("HEALTHGROUP_CONSUL_SCHEME", "https")
-	os.Setenv("HEALTHGROUP_CONSUL_INSECURE_SKIP_VERIFY", "true")
-	os.Setenv("HEALTHGROUP_CONSUL_TOKEN", "testtoken")
-	os.Setenv("HEALTHGROUP_CONSUL_CA_FILE", "/cafile")
-	os.Setenv("HEALTHGROUP_CONSUL_CERT_FILE", "/certfile")
-	os.Setenv("HEALTHGROUP_CONSUL_KEY_FILE", "/keyfile")
-	os.Setenv("HEALTHGROUP_CONSUL_TIMEOUT", "10s")
+	os.Setenv("HG_SERVER_ADDRESS", "testhost")
+	os.Setenv("HG_CONCURRENCY", "1")
+	os.Setenv("HG_SERVER_PORT", "123")
+	os.Setenv("HG_KUBERNETES_ENABLED", "true")
+	os.Setenv("HG_CONSUL_ENABLED", "true")
+	os.Setenv("HG_CONSUL_ADDRESS", "consul.host:8500")
+	os.Setenv("HG_CONSUL_SCHEME", "https")
+	os.Setenv("HG_CONSUL_INSECURE_SKIP_VERIFY", "true")
+	os.Setenv("HG_CONSUL_TOKEN", "testtoken")
+	os.Setenv("HG_CONSUL_CA_FILE", "/cafile")
+	os.Setenv("HG_CONSUL_CERT_FILE", "/certfile")
+	os.Setenv("HG_CONSUL_KEY_FILE", "/keyfile")
+	os.Setenv("HG_CONSUL_TIMEOUT", "10s")
 
 	err := config.SetFromEnv()
 
-	assert.Equal(t, "testhost", config.Server.Address, "HEALTHGROUP_SERVER_ADDRESS - should be equal")
-	assert.Equal(t, 1, config.Concurrency, "HEALTHGROUP_CONCURRENCY - should be equal")
-	assert.Equal(t, 123, config.Server.Port, "HEALTHGROUP_SERVER_PORT - should be equal")
-	assert.Equal(t, true, config.Kubernetes.Enabled, "HEALTHGROUP_KUBERNETES_ENABLED - should be equal")
-	assert.Equal(t, true, config.Consul.Enabled, "HEALTHGROUP_CONSUL_ENABLED - should be equal")
-	assert.Equal(t, "consul.host", config.Consul.Address, "HEALTHGROUP_CONSUL_ADDRESS - should be equal")
-	assert.Equal(t, 8501, config.Consul.Port, "HEALTHGROUP_CONSUL_PORT - should be equal")
-	assert.Equal(t, "https", config.Consul.Scheme, "HEALTHGROUP_CONSUL_SCHEME - should be equal")
-	assert.Equal(t, true, config.Consul.InsecureSkipVerify, "HEALTHGROUP_CONSUL_INSECURE_SKIP_VERIFY - should be equal")
-	assert.Equal(t, "testtoken", config.Consul.Token, "HEALTHGROUP_CONSUL_TOKEN - should be equal")
-	assert.Equal(t, "/cafile", config.Consul.CAFile, "HEALTHGROUP_CONSUL_TOKEN - should be equal")
-	assert.Equal(t, "/certfile", config.Consul.CertFile, "HEALTHGROUP_CONSUL_CERT_FILE - should be equal")
-	assert.Equal(t, "/keyfile", config.Consul.KeyFile, "HEALTHGROUP_CONSUL_KEY_FILE - should be equal")
-	assert.Equal(t, time.Second*10, config.Consul.Timeout, "HEALTHGROUP_CONSUL_TIMEOUT - should be equal")
+	assert.Equal(t, "testhost", config.Server.Address, "HG_SERVER_ADDRESS - should be equal")
+	assert.Equal(t, 1, config.Concurrency, "HG_CONCURRENCY - should be equal")
+	assert.Equal(t, 123, config.Server.Port, "HG_SERVER_PORT - should be equal")
+	assert.Equal(t, true, config.Kubernetes.Enabled, "HG_KUBERNETES_ENABLED - should be equal")
+	assert.Equal(t, true, config.Consul.Enabled, "HG_CONSUL_ENABLED - should be equal")
+	assert.Equal(t, "consul.host:8500", config.Consul.Address, "HG_CONSUL_ADDRESS - should be equal")
+	assert.Equal(t, "https", config.Consul.Scheme, "HG_CONSUL_SCHEME - should be equal")
+	assert.Equal(t, true, config.Consul.InsecureSkipVerify, "HG_CONSUL_INSECURE_SKIP_VERIFY - should be equal")
+	assert.Equal(t, "testtoken", config.Consul.Token, "HG_CONSUL_TOKEN - should be equal")
+	assert.Equal(t, "/cafile", config.Consul.CAFile, "HG_CONSUL_TOKEN - should be equal")
+	assert.Equal(t, "/certfile", config.Consul.CertFile, "HG_CONSUL_CERT_FILE - should be equal")
+	assert.Equal(t, "/keyfile", config.Consul.KeyFile, "HG_CONSUL_KEY_FILE - should be equal")
+	assert.Equal(t, time.Second*10, config.Consul.Timeout, "HG_CONSUL_TIMEOUT - should be equal")
 
 	assert.Nil(t, err, "error should be nil")
 }
@@ -54,7 +53,8 @@ func TestSetFromEnv(t *testing.T) {
 func TestSetDefault(t *testing.T) {
 	t.Parallel()
 
-	config := New()
+	logger, _ := log.NewAtLevel("ERROR")
+	config := New(WithLogger(logger))
 	err := config.SetDefault()
 
 	assert.Equal(t, "0.0.0.0", config.Server.Address)
@@ -63,9 +63,8 @@ func TestSetDefault(t *testing.T) {
 	assert.Equal(t, 5, config.Concurrency)
 	assert.Equal(t, true, config.Kubernetes.Enabled)
 	assert.Equal(t, false, config.Consul.Enabled)
-	assert.Equal(t, "127.0.0.1", config.Consul.Address)
+	assert.Equal(t, "127.0.0.1:8500", config.Consul.Address)
 	assert.Equal(t, "http", config.Consul.Scheme)
-	assert.Equal(t, 8500, config.Consul.Port)
 	assert.Empty(t, config.Consul.Token)
 	assert.Equal(t, time.Second*2, config.Consul.Timeout)
 	assert.Equal(t, false, config.Consul.InsecureSkipVerify)
@@ -78,11 +77,11 @@ func TestSetDefault(t *testing.T) {
 
 func TestReadConfig(t *testing.T) {
 	// To be sure that the env variables aren't set
-	os.Unsetenv("HEALTHGROUP_SERVER_ADDRESS")
-	os.Unsetenv("HEALTHGROUP_CONCURRENCY")
-	os.Unsetenv("HEALTHGROUP_SERVER_PORT")
+	os.Unsetenv("HG_SERVER_ADDRESS")
+	os.Unsetenv("HG_CONCURRENCY")
+	os.Unsetenv("HG_SERVER_PORT")
 
-	os.Setenv("HEALTHGROUP_CONSUL_ENABLED", "true")
+	os.Setenv("HG_CONSUL_ENABLED", "true")
 
 	logger, _ := log.NewAtLevel("ERROR")
 
@@ -99,10 +98,10 @@ func TestReadConfig(t *testing.T) {
 	assert.Equal(t, 8080, config.Server.Port)
 	assert.Equal(t, 5, config.Concurrency)
 	assert.Equal(t, HTTPHealthCheck{
-		Type:       "https",
-		Host:       "google.com",
-		TimeoutSec: 50,
-		Service:    "test",
+		Type:    "https",
+		Host:    "google.com",
+		Timeout: 5 * time.Second,
+		Service: "test",
 	}, config.HTTPHealthCheck[0])
 	assert.Equal(t, true, config.Consul.Enabled)
 

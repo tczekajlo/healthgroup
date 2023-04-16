@@ -32,13 +32,15 @@ type Server struct {
 }
 
 type HTTPHealthCheck struct {
-	TimeoutSec  int
-	Type        string
-	RequestPath string
-	Port        int
-	Host        string
-	Service     string
-	Namespace   string
+	Timeout            time.Duration
+	Type               string
+	RequestPath        string
+	Port               int
+	Host               string
+	Service            string
+	Namespace          string
+	InsecureSkipVerify bool
+	Discovery          string
 }
 
 type Kubernetes struct {
@@ -48,7 +50,6 @@ type Kubernetes struct {
 type Consul struct {
 	Enabled            bool
 	Address            string
-	Port               int
 	Scheme             string
 	CAFile             string
 	CertFile           string

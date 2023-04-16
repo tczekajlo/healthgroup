@@ -5,6 +5,7 @@
 # make output
 bin/
 out/
+dist/
 
 ##########
 # Golang #
