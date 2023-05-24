@@ -84,7 +84,7 @@ require (
 )
 
 require (
-	github.com/gofiber/fiber/v2 v2.45.0
+	github.com/gofiber/fiber/v2 v2.46.0
 	github.com/hashicorp/consul/api v1.20.0
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/spf13/viper v1.15.0
