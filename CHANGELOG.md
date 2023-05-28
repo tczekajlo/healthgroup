@@ -1,6 +1,18 @@
 
+<a name="1.1.0"></a>
+## [1.1.0](https://github.com/tczekajlo/healthgroup/compare/1.0.3...1.1.0) (2023-05-28)
+
+### Chore
+
+* Update the release changelog template
+
+### Features
+
+* Read configuration file from Kubernetes ConfigMap ([#17](https://github.com/tczekajlo/healthgroup/issues/17))
+
+
 <a name="1.0.3"></a>
-## [1.0.3](https://github.com/tczekajlo/healthgroup/compare/1.0.2...1.0.3) (2023-05-24)
+## [1.0.3](https://github.com/tczekajlo/healthgroup/compare/1.0.2...1.0.3) (2023-05-27)
 
 ### Bug Fixes
 
