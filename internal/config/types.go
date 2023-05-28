@@ -11,6 +11,7 @@ type Option func(c *Config)
 type Flags struct {
 	Kubeconfig string
 	ConfigFile string
+	ConfigMap  string
 	InCluster  bool
 }
 

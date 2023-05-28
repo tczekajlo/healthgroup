@@ -1,13 +1,21 @@
 package config
 
 import (
+	"bytes"
+	"context"
 	"fmt"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/mitchellh/go-homedir"
 	"github.com/spf13/viper"
 	"go.uber.org/zap"
+	"golang.org/x/xerrors"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/client-go/kubernetes"
+	"k8s.io/client-go/rest"
+	"k8s.io/client-go/tools/clientcmd"
 )
 
 func New(opts ...Option) *Config {
@@ -20,11 +28,63 @@ func New(opts ...Option) *Config {
 	return config
 }
 
-func (c *Config) ReadConfig() error {
-	if err := c.SetDefault(); err != nil {
+// ReadConfigFromFile reads the configuration from a Kubernetes ConfigMap.
+func (c *Config) ReadConfigFromConfigMap() error {
+	var (
+		config *rest.Config
+		err    error
+	)
+
+	flags := c.Flags()
+
+	if flags.InCluster {
+		config, err = rest.InClusterConfig()
+		if err != nil {
+			return err
+		}
+	} else {
+		config, err = clientcmd.BuildConfigFromFlags("", c.flags.Kubeconfig)
+		if err != nil {
+			return err
+		}
+	}
+	// creates the clientset
+	httpClient, err := rest.HTTPClientFor(config)
+	if err != nil {
 		return err
 	}
 
+	clientset, err := kubernetes.NewForConfigAndClient(config, httpClient)
+	if err != nil {
+		return err
+	}
+
+	cfg := strings.Split(c.flags.ConfigMap, "/")
+
+	if len(cfg) != 2 { //nolint:gomnd
+		return xerrors.Errorf("ConfigMap doesn't exists: %s", cfg)
+	}
+
+	ns := cfg[0]
+	name := cfg[1]
+
+	c.logger.Info("Reading configuration from ConfigMap",
+		zap.String("namespace", ns),
+		zap.String("name", name),
+	)
+	cm, err := clientset.CoreV1().ConfigMaps(ns).Get(context.TODO(), name, metav1.GetOptions{})
+	if err != nil {
+		return err
+	}
+
+	r := bytes.NewBufferString(cm.Data["config.yaml"])
+	viper.SetConfigType("yaml")
+
+	return viper.ReadConfig(r)
+}
+
+// ReadConfigFromFile reads the configuration from a file.
+func (c *Config) ReadConfigFromFile() {
 	if c.file != "" {
 		// Use config file from the flag.
 		viper.SetConfigFile(c.file)
@@ -45,6 +105,20 @@ func (c *Config) ReadConfig() error {
 	// If a config file is found, read it in.
 	if err := viper.ReadInConfig(); err == nil {
 		c.logger.Info("Using config", zap.String("file", viper.ConfigFileUsed()))
+	}
+}
+
+func (c *Config) ReadConfig() error {
+	if err := c.SetDefault(); err != nil {
+		return err
+	}
+
+	if c.flags.ConfigMap != "" {
+		if err := c.ReadConfigFromConfigMap(); err != nil {
+			return err
+		}
+	} else {
+		c.ReadConfigFromFile()
 	}
 
 	err := viper.Unmarshal(&c)

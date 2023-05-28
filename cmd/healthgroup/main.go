@@ -21,6 +21,7 @@ func main() {
 
 	flag.BoolVar(&f.InCluster, "in-cluster", false, "use in-cluster config. Use always in a case when the app is running on a Kubernetes cluster")
 	flag.StringVar(&f.ConfigFile, "config", "", "config file (default is $HOME/.healthgroup.yaml)")
+	flag.StringVar(&f.ConfigMap, "configmap", "", "ConfigMap with the configuration file, e.g. namespace/configmap")
 
 	if home := homedir.HomeDir(); home != "" {
 		flag.StringVar(&f.Kubeconfig, "kubeconfig", filepath.Join(home, ".kube", "config"), "absolute path to the kubeconfig file")

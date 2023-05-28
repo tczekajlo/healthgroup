@@ -52,6 +52,9 @@ jobs:
       - name: Add Consul test service
         run: curl --request PUT --data @test/testdata/consul_test_service.json http://127.0.0.1:8500/v1/catalog/register
 
+      - name: Create a ConfigMap with the configuration
+        run: kubectl create -f ./configs/configmap-healthgroup.yaml
+
       - name: Set up Go
         uses: actions/setup-go@v4
         with:
