@@ -18,6 +18,7 @@ Use cases where `healthgroup` can be helpful are up to your imagination :) The t
     - [Environment variables](#environment-variables)
     - [Configuration file](#configuration-file)
       - [HTTP(s) health check specification](#https-health-check-specification)
+    - [Read configuration file from Kubernetes ConfigMap](#read-configuration-file-from-kubernetes-configmap)
   - [Health check grouping](#health-check-grouping)
   - [Endpoints](#endpoints)
     - [Kubernetes](#kubernetes)
@@ -34,8 +35,9 @@ Use cases where `healthgroup` can be helpful are up to your imagination :) The t
 ## Usage
 
 ```text
-Usage of ./out/bin/healthgroup:
+Usage of healthgroup:
       --config string       config file (default is $HOME/.healthgroup.yaml)
+      --configmap string    ConfigMap with the configuration file, e.g. namespace/configmap
       --in-cluster          use in-cluster config. Use always in a case when the app is running on a Kubernetes cluster
       --kubeconfig string   absolute path to the kubeconfig file (default "/Users/tczekajlo/.kube/config")
 ```
@@ -128,6 +130,12 @@ httpHealthCheck:
 | `timeout`              | Timeout specifies a time limit for requests made to the Consul server. A Timeout of zero means no timeout | `string` | `0s`    |
 | `type`                 | Type of the check, available: `http`, `https`, `http2`                                                    | `string` | `http`  |
 | `discovery`            | Specifies a discovery service for which the check should be executed, available: `consul`, `kubernetes`   | `string` | `""`    |
+
+### Read configuration file from Kubernetes ConfigMap
+
+It's possible to read the configuration file directly from a Kubernetes ConfigMap. The [`configs/configmap-healthgroup.yaml`](./configs/configmap-healthgroup.yaml) file shows an example of ConfigMap that includes the configuration file for healgroup. The configuration file has to be passed under the `config.yaml` key.
+
+Using the `--configmap` flag you can define which ConfigMap should be used. The flag value has the following syntax: `namespace/configmap_name`.
 
 ## Health check grouping
 
