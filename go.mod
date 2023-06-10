@@ -4,7 +4,7 @@ go 1.20
 
 require (
 	github.com/spf13/pflag v1.0.5
-	github.com/stretchr/testify v1.8.3
+	github.com/stretchr/testify v1.8.4
 	go.uber.org/automaxprocs v1.5.2
 	go.uber.org/zap v1.24.0
 	golang.org/x/net v0.10.0
