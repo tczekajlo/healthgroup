@@ -1,4 +1,21 @@
 
+<a name="1.1.1"></a>
+## [1.1.1](https://github.com/tczekajlo/healthgroup/compare/1.1.0...1.1.1) (2023-06-24)
+
+### Bug Fixes
+
+* bump golang.org/x/net from 0.10.0 to 0.11.0 ([#25](https://github.com/tczekajlo/healthgroup/issues/25))
+* bump k8s.io/client-go from 0.27.2 to 0.27.3 ([#23](https://github.com/tczekajlo/healthgroup/issues/23))
+* bump github.com/gofiber/fiber/v2 from 2.46.0 to 2.47.0 ([#26](https://github.com/tczekajlo/healthgroup/issues/26))
+* bump github.com/spf13/viper from 1.15.0 to 1.16.0 ([#18](https://github.com/tczekajlo/healthgroup/issues/18))
+* bump github.com/hashicorp/consul/api from 1.20.0 to 1.21.0 ([#19](https://github.com/tczekajlo/healthgroup/issues/19))
+* bump github.com/stretchr/testify from 1.8.3 to 1.8.4 ([#20](https://github.com/tczekajlo/healthgroup/issues/20))
+
+### Chore
+
+* Disable depguard for golangci-lint ([#21](https://github.com/tczekajlo/healthgroup/issues/21))
+
+
 <a name="1.1.0"></a>
 ## [1.1.0](https://github.com/tczekajlo/healthgroup/compare/1.0.3...1.1.0) (2023-05-28)
 
