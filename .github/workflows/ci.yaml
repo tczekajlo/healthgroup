@@ -40,7 +40,7 @@ jobs:
     runs-on: ubuntu-latest
     services:
       consul:
-        image: consul:latest
+        image: consul:1.15
         ports:
           - 8500:8500
     steps:
