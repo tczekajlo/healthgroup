@@ -82,7 +82,7 @@ require (
 
 require (
 	github.com/gofiber/fiber/v2 v2.49.2
-	github.com/hashicorp/consul/api v1.24.0
+	github.com/hashicorp/consul/api v1.25.0
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/spf13/viper v1.16.0
 	go.uber.org/atomic v1.9.0 // indirect
