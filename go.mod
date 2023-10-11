@@ -6,7 +6,7 @@ require (
 	github.com/spf13/pflag v1.0.5
 	github.com/stretchr/testify v1.8.4
 	go.uber.org/automaxprocs v1.5.3
-	go.uber.org/zap v1.24.0
+	go.uber.org/zap v1.26.0
 	golang.org/x/net v0.16.0
 	k8s.io/api v0.28.2
 	k8s.io/apimachinery v0.28.2
@@ -85,8 +85,7 @@ require (
 	github.com/hashicorp/consul/api v1.24.0
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/spf13/viper v1.16.0
-	go.uber.org/atomic v1.9.0 // indirect
-	go.uber.org/multierr v1.8.0 // indirect
+	go.uber.org/multierr v1.10.0 // indirect
 	golang.org/x/sync v0.3.0
 	golang.org/x/xerrors v0.0.0-20220907171357-04be3eba64a2
 )
